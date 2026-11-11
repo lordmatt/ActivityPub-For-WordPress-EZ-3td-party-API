@@ -9,6 +9,8 @@ namespace ActivityPub\EZ3P;
  * 
  * I would love to include any snippets that you are prepared to share under the
  * MIT license for working with ActivityPub.
+ * 
+ * This all started as a feature request: <https://github.com/Automattic/wordpress-activitypub/issues/4058>
  *
  * @author lordmatt
  * @status draft - incomplete !!
@@ -17,6 +19,7 @@ namespace ActivityPub\EZ3P;
  * 
  * MIT License
  * 
+ * Copyright (c) 2026 Matthias Pfefferle
  * Copyright (c) 2026 Matthew Brown except as noted:
  * Copyright (c) 2026 Matthew Brown on OpenMentions <https://openmentions.com>
  * Copyright (c) 2025 Matthew Brown on isBrill <https://isbrill.com>
@@ -81,15 +84,24 @@ class common_ap_alias {
     // Initial code for followers used on <https://isbrill.com>
     
     /**
-     * Get an array of followers
+     * Get an array of followers for the blog
      * 
-     * $userid=0 indicates to do this for the blog
+     * @param int $blogid
+     * @return array
+     */
+    public static function get_blog_followers($blogid=1){
+        $followers = Activitypub\Collection\Followers::get_many( $blogid );
+        return $followers; 
+    }
+    
+    /**
+     * Get an array of followers for the blog
+     * 
      * @param int $userid
      * @return array
      */
-    public static function get_followers($userid=0){
-        $followers = Activitypub\Collection\Followers::get_many( $userid );
-        return $followers;
+    public static function get_user_followers($user_id){
+        return Activitypub\get_followers( $user_id );
     }
     
     public static function get_follower_object($id){
@@ -109,22 +121,35 @@ class common_ap_alias {
     /**
      * Get the number of followers for blog or user
      * 
-     * $userid=0 indicates to do this for the blog
+     * $userid=0 indicates to do this for the  current blog
+     * 
+     * This version thanks to comment by the lovely Matthias Pfefferle  
+     * 
      * @param int $userid
      * @return int
      */
     public static function get_follower_count($userid=0){
-        $count=count(self::get_followers($userid));
-        // write code here
-        return $count;
+        return Activitypub\count_followers( $userid );
     }   
     
     /**
-     * Alias of get_follower_count(0);
+     * To call for another blog, change the working blog call this and then
+     * change back to the current blog
+     * 
+     * This version thanks to comment by the lovely Matthias Pfefferle 
+     * 
+     * Was an alias of get_follower_count(0);
      * @return int
      */
     public static function get_follower_count_blog() {
-        return self::get_follower_count(0);
+        return Activitypub\count_followers( 0 );
+    }
+    
+    public static function get_follower_count_for_other_blog($blogid){
+        switch_to_blog( $blog_id );
+        $count = self::get_follower_count_blog();
+        restore_current_blog();
+        return $count;
     }
     
     // following
@@ -132,8 +157,21 @@ class common_ap_alias {
         // I've yet to figure this out
     }
     
-    public static function follow($account, $userid=0){
-        // I've yet to figure this out
+    /**
+     * Pass a remote actor and a user (or zero for current blog) to follow said
+     * remote actor.  $remote_actor can be a URL, a WebFinger handle or a post ID.
+     * 
+     * This version thanks to comment by the lovely Matthias Pfefferle 
+     * @param string $remote_actor - see notes
+     * @param int $user_id
+     * @return unknown
+     */
+    public static function follow($remote_actor, $user_id=0){
+        return Activitypub\follow( $remote_actor, $user_id );
+    }
+    
+    public static function unfollow($remote_actor, $user_id=0){
+        return Activitypub\unfollow( $remote_actor, $user_id );
     }
     
     // stats and data
