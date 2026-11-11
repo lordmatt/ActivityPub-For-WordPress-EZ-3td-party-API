@@ -140,8 +140,21 @@ class common_ap_alias {
     
     // following
     public static function get_following($userid=0){
-        // I've yet to figure this out
+        // I'm not entirely sure how to do this for user AND blog. 
+        // But I will figure it out in time
     }
+    
+    /**
+     * The unused param here is an array of additional arguments.
+     * 
+     * @param int $user_id
+     * @param int $number
+     * @param bull|int $page
+     * @return unknown
+     */
+    public static function get_user_following($user_id, $number = -1, $page = null){
+        return Activitypub\Collection\Following::query( $user_id, $number, $page, [] );
+    } 
     
     /**
      * Pass a remote actor and a user (or zero for current blog) to follow said
