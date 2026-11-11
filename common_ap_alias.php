@@ -45,21 +45,7 @@ namespace ActivityPub\EZ3P;
  */
 class common_ap_alias {
    
-    /**
-     * 
-     * If WebMention is also installed, will force the output of Facepile in
-     * the theme.
-     * 
-     * Ideally, it would be good to write an EZ3P call for when WebMention is 
-     * not installed
-     * 
-     * Initial code from <https://openmentions.com>
-     */
-    static public function template_output_facepile(){
-        if ( is_callable( [ '\Webmention\Comment_Walker', 'show_separated_reactions' ] ) ) {
-            \Webmention\Comment_Walker::show_separated_reactions();
-        }
-    }
+
     
     static public function get_extra_fields($userid){
         // should just be a get CPT $type for $userid
@@ -196,6 +182,8 @@ class common_ap_alias {
         return $count;
     }
     
+    // templates and theme tweaks
+    
     /**
      * A template function to make some text for all types of reactions which it
      * turns out did not touch ActivityPub at all.
@@ -253,6 +241,22 @@ class common_ap_alias {
 
         return count($comments);
 
+    }
+    
+    /**
+     * 
+     * If WebMention is also installed, will force the output of Facepile in
+     * the theme.
+     * 
+     * Ideally, it would be good to write an EZ3P call for when WebMention is 
+     * not installed
+     * 
+     * Initial code from <https://openmentions.com>
+     */
+    static public function template_output_facepile(){
+        if ( is_callable( [ '\Webmention\Comment_Walker', 'show_separated_reactions' ] ) ) {
+            \Webmention\Comment_Walker::show_separated_reactions();
+        }
     }
     
 }
