@@ -30,3 +30,6 @@ API that this class will be.
 Another idea might be to make it a library that can be included.
 
 I'm sure there are other ideas down the road.
+
+Another destination I fully support is making this entirely redundant because of
+the existence of easy method calls somewhere else. Same for a wiki/guide/thing.
