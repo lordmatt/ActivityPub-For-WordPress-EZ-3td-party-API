@@ -161,7 +161,7 @@ class common_ap_alias {
      * remote actor.  $remote_actor can be a URL, a WebFinger handle or a post ID.
      * 
      * This version thanks to comment by the lovely Matthias Pfefferle 
-     * @param string $remote_actor - see notes
+     * @param int|string $remote_actor - see notes
      * @param int $user_id
      * @return unknown
      */
